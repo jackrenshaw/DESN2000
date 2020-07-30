@@ -25,12 +25,12 @@ void flash_lights();
 
 void pin_setup(char* pin,char direction){
   char buf1[0x100];
-   snprintf(buf1, sizeof(buf1), "/sys/class/gpio/export");
+   snprintf(buf1, sizeof(buf1), "%sexport",RPI_GPIO_LOCATION);
    FILE *fp1 = fopen(buf1, "w");
    fputs(pin,fp1);
    fclose(fp1);
    char buf[0x100];
-   snprintf(buf, sizeof(buf), ("/sys/class/gpio/gpio%s/direction",pin));
+   snprintf(buf, sizeof(buf), "%sgpio%s/direction",RPI_GPIO_LOCATION,pin);
    FILE *fp = fopen(buf, "w");
    if(direction == 'i'){
     fputs("in",fp);       
@@ -61,23 +61,24 @@ void pin_setup_6(char direction){
 */
 
 char get_gpio_value(int pin){
+  char state = '0';
    if(pin != -1){
     char buf[0x100];
-    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value", pin);
+    snprintf(buf, sizeof(buf), "%sgpio%d/value",RPI_GPIO_LOCATION,pin);
     FILE *fp = fopen(buf, "r");
-    char state = fgetc(fp);
+    state = fgetc(fp);
     fclose(fp);
-    return state;
   }else{
-    return '-1';
+    return state;
   }
+  return state;
 }
 
 void write_gpio_value(int pin, char value){
    char buf[0x100];
-   snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value", pin);
+   snprintf(buf, sizeof(buf), "%sgpio%d/value", RPI_GPIO_LOCATION, pin);
    FILE *fp = fopen(buf, "w");
-   fputs("1",fp);
+   fputc(value,fp);
    fclose(fp);
 }
 

@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <time.h> 
 #include <stdlib.h>
 #include <math.h>
@@ -109,4 +109,19 @@ int main(){
   printf(" - Jack Renshaw\n");
   printf(" - Ayden Young\n");
   printf(" - Sashan De Silva\n");
+  sevenseg_print(45);
+  int prev = 0;
+  int curr = 0;
+  int wheel_cycles = 0;
+  while(1){
+  	curr = get_gpio_value(WHEEL_SENSOR);
+  	if((prev == '1') && (curr == '0')){
+  		printf("%f\n", calc_speed(wheel_cycles));
+  		wheel_cycles = 0;
+  	}else{
+  		wheel_cycles++;
+  	}
+  	prev = curr;
+	mdelay(1000000/CYCLES_SECOND);
+  }
 }
