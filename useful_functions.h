@@ -88,12 +88,11 @@ float calc_speed(int cycles){
 }
 
 // function returns the number of cycles to count for a given speed before the GPIO will change
-float calc_cycles(float speed){
+long double calc_time(float speed){
     speed = speed / 3600 * 1000; // SI speed of the tram
     long double distance = WHEELD * 3.14159265 / 1000; // distance for a full wheel revolution in m
     long double time = distance / speed; // number of seconds for a full wheel revolution
-    float cycles = time * CYCLES_SECOND;
-    return cycles;
+    return time;
 }
 
 void sevenseg_print(int speed){

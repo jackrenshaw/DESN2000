@@ -1,6 +1,6 @@
 #define WHEELD 300.0 //wheel diameter in mm
 #define MAX_ACCELERATION 1.0 //maximum acceleration in m/s/s
-#define CYCLES_SECOND 1000.0 // (clock cycles per while loop)
+#define CYCLES_SECOND 10.0 // (clock cycles per while loop)
 #define TRAM_MASS 40000 // mass of the tram in kg
 #define AERO_CONSTANT 5702.0 // (derived from a rough calculation, for kinematic modelling)
 #define FRICTION_CONSTANT 0.3 // (approximate speed invariate deceleration)

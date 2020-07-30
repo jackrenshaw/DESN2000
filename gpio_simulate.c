@@ -7,20 +7,24 @@
 #include "const.h"
 
 int main(){
-	printf("%d\n",(int)round(calc_cycles(50.0)));
 	float speed;
 	scanf("%f",&speed);
-	printf("%f\n",speed);
-	int i = 0.0;
+	long double implied_time = calc_time(speed);
+	int delay_time = (int)round(1000000*implied_time/60);
+	printf("%Lf\n%d\n", implied_time,delay_time);
+	int i = 0;
 	while(1){
-		if(round(calc_cycles(speed)) == i){
+		printf("%c\n", get_gpio_value(WHEEL_SENSOR));
+		if(i < 3){
 			write_gpio_value(WHEEL_SENSOR,'1');
-			i=0.0;
 		}else{
 			write_gpio_value(WHEEL_SENSOR,'0');
+		}
+		mdelay(delay_time);
+		if(i > 60){
+			i = 0;
+		}else{
 			i++;
 		}
-		printf("%c\n",get_gpio_value(WHEEL_SENSOR));
-		mdelay(1000000/CYCLES_SECOND);
 	}
 }
