@@ -115,15 +115,27 @@ int main(){
   int wheel_cycles = 0;
   clock_t start_time = clock();
   clock_t end_time;
+  long double delay;
+  float curr_speed;
+  float avg_speed;
   int i =0;
+  float speed_vals[5] = {0,0,0,0,0};
   while(1){
   	//printf("%d\n",i);
   	curr = get_gpio_value(WHEEL_SENSOR);
   	if((prev == '1') && (curr == '0')){
-  		printf("Falling Edge\n");
-   		clock_t end_time = clock(); 
-   		long double delay = (float)(end_time-start_time)/(float)CLOCKS_PER_SEC;
-  		printf("speed:%f\n", calc_speed(delay));
+   		end_time = clock(); 
+   		delay = (float)(end_time-start_time)/(float)CLOCKS_PER_SEC;
+  		curr_speed = calc_speed(delay);
+      printf("%f\n", curr_speed);
+      i = 4;
+      while(i > 0){
+        speed_vals[i] = speed_vals[(i-1)];
+        i--;
+      }
+      speed_vals[0] = curr_speed;
+      avg_speed = smooth_speed(speed_vals);
+      printf("Average Speed %f\n",avg_speed);
   		start_time = end_time; 
   	}
   	prev = curr;

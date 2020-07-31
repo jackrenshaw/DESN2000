@@ -94,6 +94,45 @@ long double calc_time(float speed){
     return time;
 }
 
+float smooth_speed(float speed[5]){
+    printf("Smooth Speed Function Called\n");
+    float avg_speed = 0;
+    int i;
+    i=0;
+    while(i<5){
+        avg_speed = avg_speed + speed[i];
+        i++;
+    }
+    avg_speed = avg_speed/5;
+    if((speed[0] > 0.0) && (speed[1] > 0.0) && (speed[2] == 0.0) && (speed[3] == 0.0)){
+        avg_speed = speed[0];
+        speed[1] = speed[0];
+        speed[2] = speed[0];
+        speed[3] = speed[0];
+        speed[4] = speed[0];
+    }
+    float residuals[5];
+    float avg_residual = 0;
+    float max_residual = 0;
+    int max_residual_index = 0;
+    i=0;
+    while(i<5){
+        residuals[i] = (speed[i] - avg_speed)*(speed[i] - avg_speed);
+        avg_residual = avg_residual + residuals[i];
+        if(residuals[i] > max_residual){
+            max_residual = residuals[i];
+            max_residual_index = i;
+        }
+        i++;
+    }
+    avg_residual = avg_residual/5;
+    if((max_residual > (avg_speed/2)) && (avg_speed != 0.0)){
+        speed[max_residual_index] = avg_speed;
+        avg_speed = smooth_speed(speed);
+    }
+    return avg_speed;
+}
+
 void sevenseg_print(int speed){
     int units = speed%10;
     int tens = floor(speed - units)/10;

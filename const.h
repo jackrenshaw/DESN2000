@@ -1,5 +1,6 @@
 #define WHEELD 3000.0 //wheel diameter in mm
 #define MAX_ACCELERATION 1.0 //maximum acceleration in m/s/s
+#define MAX_SPEED 50.0 // maximum speed
 #define CYCLES_SECOND 10.0 // (clock cycles per while loop)
 #define TRAM_MASS 40000 // mass of the tram in kg
 #define AERO_CONSTANT 5702.0 // (derived from a rough calculation, for kinematic modelling)
@@ -10,6 +11,7 @@
 #define PEDESTRIAN_TIME_DELAY 3000
 #define FLASH_LIGHTS_INTERVAL 1000
 #define NUM_FLASHES 3
+#define MAX_SPEED 50.0
 #define THROTTLE_ADC 1 // numer of digital outputs for the throttle
 #define RPI_GPIO_LOCATION "gpio/"
 #define SIM_GPIO_LOCATION "gpio/"
