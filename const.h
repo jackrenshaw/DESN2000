@@ -1,4 +1,4 @@
-#define WHEELD 300.0 //wheel diameter in mm
+#define WHEELD 3000.0 //wheel diameter in mm
 #define MAX_ACCELERATION 1.0 //maximum acceleration in m/s/s
 #define CYCLES_SECOND 10.0 // (clock cycles per while loop)
 #define TRAM_MASS 40000 // mass of the tram in kg

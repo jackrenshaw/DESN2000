@@ -113,15 +113,21 @@ int main(){
   int prev = 0;
   int curr = 0;
   int wheel_cycles = 0;
+  clock_t start_time = clock();
+  clock_t end_time;
+  int i =0;
   while(1){
+  	//printf("%d\n",i);
   	curr = get_gpio_value(WHEEL_SENSOR);
   	if((prev == '1') && (curr == '0')){
-  		printf("%f\n", calc_speed(wheel_cycles));
-  		wheel_cycles = 0;
-  	}else{
-  		wheel_cycles++;
+  		printf("Falling Edge\n");
+   		clock_t end_time = clock(); 
+   		long double delay = (float)(end_time-start_time)/(float)CLOCKS_PER_SEC;
+  		printf("speed:%f\n", calc_speed(delay));
+  		start_time = end_time; 
   	}
   	prev = curr;
-	mdelay(1000000/CYCLES_SECOND);
+  	mdelay(1000);
+  	i++;
   }
 }

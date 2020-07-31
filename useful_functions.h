@@ -6,7 +6,7 @@ float max(float a,float b);
 
 float k_model(float speed,float throttle,int brake);
 void sevenseg_simulate(char bcd[8]);
-float calc_speed(int cycles);
+float calc_speed(long double time);
 
 
 void mdelay(int milli_seconds) 
@@ -79,8 +79,7 @@ void sevenseg_simulate(char bcd[8]){
     printf("Current Speed: %d\n",speed);
 }
 
-float calc_speed(int cycles){
-    long double time = cycles / CYCLES_SECOND; // get amount of time in seconds
+float calc_speed(long double time){
     long double distance = WHEELD * 3.14159265 / 1000;
     float speed_ms = distance/time;
     float speed_kph = speed_ms * 3600 / 1000;

@@ -15,16 +15,16 @@ int main(){
 	int i = 0;
 	while(1){
 		printf("%c\n", get_gpio_value(WHEEL_SENSOR));
-		if(i < 3){
+		if(i == 0){
 			write_gpio_value(WHEEL_SENSOR,'1');
 		}else{
 			write_gpio_value(WHEEL_SENSOR,'0');
 		}
-		mdelay(delay_time);
-		if(i > 60){
+		if(i > 58){
 			i = 0;
 		}else{
 			i++;
 		}
+		mdelay(delay_time);
 	}
 }
