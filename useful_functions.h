@@ -1,3 +1,4 @@
+#include "<math.h>"
 #include "const.h"
 //general functions
 void mdelay(int milli_seconds);
