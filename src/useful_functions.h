@@ -1,5 +1,6 @@
-#include "<math.h>"
+#include <math.h>
 #include "const.h"
+
 //general functions
 void mdelay(int milli_seconds);
 int a_gt_b(float a,float b);
@@ -8,6 +9,8 @@ float max(float a,float b);
 float k_model(float speed,float throttle,int brake);
 void sevenseg_simulate(char bcd[8]);
 float calc_speed(long double time);
+long double calc_time(float speed);
+float smooth_speed(float speed[5]);
 
 
 void mdelay(int milli_seconds) 
@@ -42,21 +45,21 @@ float max(float a,float b){ // function returns the max value of two inputs
 // # defined values for kinetic coefficients are used
 // The trams speed is modelled in the following way:
 float k_model(float speed,float throttle,int brake){
-    speed = speed/3.6; //convert to SI units
-    float ke = 1/2 * TRAM_MASS * speed*speed;
+    float nspeed = speed/3.6; //convert to SI units
+    float ke = 1/2 * TRAM_MASS * nspeed*nspeed;
     float a;
     if(throttle > 0.1){
 	   a = throttle;	
     }
     else{
-	   a = -  1*a_gt_b(speed,0.0)*((AERO_CONSTANT * speed * speed / 400000) + FRICTION_CONSTANT);
+	   a = -  1*a_gt_b(nspeed,0.0)*((AERO_CONSTANT * nspeed * nspeed / 400000) + FRICTION_CONSTANT);
     }
     if(brake == 1){
-        ke = ke - BRAKE_FORCE * speed * 1/CYCLES_SECOND;
+        ke = ke - BRAKE_FORCE * nspeed * 1/CYCLES_SECOND;
         speed = sqrt(2*ke/TRAM_MASS);
     }
-    speed = speed + a/CYCLES_SECOND;
-    return max((speed*3.6),0.0);
+    nspeed = nspeed + a/CYCLES_SECOND;
+    return max((nspeed*3.6),0.0);
 }
 
 //simulate the 7seg display connected to a 4511 microcontroller
@@ -89,15 +92,18 @@ float calc_speed(long double time){
 
 // function returns the number of cycles to count for a given speed before the GPIO will change
 long double calc_time(float speed){
-    speed = speed / 3600 * 1000; // SI speed of the tram
+    float nspeed = speed / 3600 * 1000; // SI speed of the tram
     long double distance = WHEELD * 3.14159265 / 1000; // distance for a full wheel revolution in m
-    long double time = distance / speed; // number of seconds for a full wheel revolution
+    long double time = distance / nspeed; // number of seconds for a full wheel revolution
     return time;
 }
 
 float smooth_speed(float speed[5]){
-    printf("Smooth Speed Function Called\n");
-    float avg_speed = 0;
+    float avg_speed = 0.0;
+    float residuals[5];
+    float avg_residual = 0;
+    float max_residual = 0;
+    int max_residual_index = 0;
     int i;
     i=0;
     while(i<5){
@@ -112,10 +118,6 @@ float smooth_speed(float speed[5]){
         speed[3] = speed[0];
         speed[4] = speed[0];
     }
-    float residuals[5];
-    float avg_residual = 0;
-    float max_residual = 0;
-    int max_residual_index = 0;
     i=0;
     while(i<5){
         residuals[i] = (speed[i] - avg_speed)*(speed[i] - avg_speed);
@@ -152,6 +154,5 @@ void sevenseg_print(int speed){
       units = units-(bcd[i]-'0')*power;
       i++;
     }
-    printf("\n");
     sevenseg_simulate(bcd);
 }

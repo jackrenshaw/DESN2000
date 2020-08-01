@@ -1,0 +1,10 @@
+.\output\gpio_simulate_speed.o: src\gpio_simulate_speed.c
+.\output\gpio_simulate_speed.o: C:\Keil\ARM\RV31\Inc\stdio.h
+.\output\gpio_simulate_speed.o: C:\Keil\ARM\RV31\Inc\time.h
+.\output\gpio_simulate_speed.o: C:\Keil\ARM\RV31\Inc\stdlib.h
+.\output\gpio_simulate_speed.o: C:\Keil\ARM\RV31\Inc\math.h
+.\output\gpio_simulate_speed.o: src\useful_functions.h
+.\output\gpio_simulate_speed.o: src\const.h
+.\output\gpio_simulate_speed.o: src\assignment_gpio.h
+.\output\gpio_simulate_speed.o: src\const.h
+.\output\gpio_simulate_speed.o: src\const.h

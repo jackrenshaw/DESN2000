@@ -21,10 +21,10 @@ void on_headlights(void);
 void off_headlights(void);
 
 //complex functions
-void flash_lights();
+void flash_lights(void);
 
 void pin_setup(char* pin,char direction){
-  char buf1[0x100];
+	 char buf1[0x100];
    snprintf(buf1, sizeof(buf1), "%sexport",RPI_GPIO_LOCATION);
    FILE *fp1 = fopen(buf1, "w");
    fputs(pin,fp1);

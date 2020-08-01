@@ -88,7 +88,7 @@ SVC_Stack_Size  EQU     0x00000008
 ABT_Stack_Size  EQU     0x00000000
 FIQ_Stack_Size  EQU     0x00000000
 IRQ_Stack_Size  EQU     0x00000100
-USR_Stack_Size  EQU     0x00000100
+USR_Stack_Size  EQU     0x00000400
 
 ISR_Stack_Size  EQU     (UND_Stack_Size + SVC_Stack_Size + ABT_Stack_Size + \
                          FIQ_Stack_Size + IRQ_Stack_Size)
@@ -334,8 +334,8 @@ CLKSRCSEL_Val   EQU     0x00000001
 PLLCFG_Val      EQU     0x0000000B
 CCLKCFG_Val     EQU     0x00000003
 USBCLKCFG_Val   EQU     0x00000005
-PCLKSEL0_Val    EQU     0xABA9AAAA
-PCLKSEL1_Val    EQU     0x22AAA8AA
+PCLKSEL0_Val    EQU     0x55555555
+PCLKSEL1_Val    EQU     0x11555455
 
 
 ;----------------------- Memory Accelerator Module (MAM) Definitions -----------
@@ -484,7 +484,7 @@ EMC_DYNAMIC_SETUP   EQU 1
 ;//       <o0.0..10> REFRESH: Refresh timer <0x000-0x7FF>
 ;//         <i> 0 = refresh disabled, 0x01-0x7FF: value * 16 CCLKS
 ;//     </h>
-EMC_DYN_RFSH_Val    EQU 0x00000046
+EMC_DYN_RFSH_Val    EQU 0x0000001C
 
 ;//     <h> Dynamic Memory Read Configuration Register (EMCDynamicReadConfig)
 ;//       <i> Configures the dynamic memory read strategy
@@ -554,17 +554,17 @@ EMC_DYN_RD_CFG_Val  EQU 0x00000001
 ;//           <i> This value is normally found in SDRAM data sheets as tMRD or tRSA
 ;//       </h>
 ;//     </h>
-EMC_DYN_RP_Val      EQU 0x00000001
+EMC_DYN_RP_Val      EQU 0x00000002
 EMC_DYN_RAS_Val     EQU 0x00000003
-EMC_DYN_SREX_Val    EQU 0x00000005
-EMC_DYN_APR_Val     EQU 0x00000001
+EMC_DYN_SREX_Val    EQU 0x00000007
+EMC_DYN_APR_Val     EQU 0x00000002
 EMC_DYN_DAL_Val     EQU 0x00000005
 EMC_DYN_WR_Val      EQU 0x00000001
 EMC_DYN_RC_Val      EQU 0x00000005
 EMC_DYN_RFC_Val     EQU 0x00000005
-EMC_DYN_XSR_Val     EQU 0x00000005
+EMC_DYN_XSR_Val     EQU 0x00000007
 EMC_DYN_RRD_Val     EQU 0x00000001
-EMC_DYN_MRD_Val     EQU 0x00000001
+EMC_DYN_MRD_Val     EQU 0x00000002
 
 ;//     <e> Configure External Bus Behaviour for Dynamic CS0 Area
 EMC_DYNCS0_SETUP    EQU 1
@@ -595,7 +595,7 @@ EMC_DYNCS0_SETUP    EQU 1
 ;//           <1=> Low-power SDRAM
 ;//           <2=> Micron SyncFlash
 ;//       </h>
-EMC_DYN_CFG0_Val    EQU 0x00085488
+EMC_DYN_CFG0_Val    EQU 0x00080680
 
 ;//       <h> Dynamic Memory RAS & CAS Delay register (EMCDynamicRASCAS0)
 ;//         <i> Controls the RAS and CAS latencies for the dynamic memory CS0
@@ -608,7 +608,7 @@ EMC_DYN_CFG0_Val    EQU 0x00085488
 ;//           <2=> Two CCLK cycles
 ;//           <3=> Three CCLK cycles
 ;//       </h>
-EMC_DYN_RASCAS0_Val EQU 0x00000202
+EMC_DYN_RASCAS0_Val EQU 0x00000303
 
 ;//     </e> End of Dynamic Setup for CS0 Area
 
@@ -785,42 +785,42 @@ EMC_STA_CFG0_Val    EQU 0x00000081
 ;//         <o.0..3> WAITWEN: Wait write enable <1-16> <#-1>
 ;//           <i> The delay is in CCLK cycles
 ;//       </h>
-EMC_STA_WWEN0_Val   EQU 0x00000000
+EMC_STA_WWEN0_Val   EQU 0x00000002
 
 ;//       <h> Static Memory Output Enable Delay register (EMCStaticWaitOen0)
 ;//         <i> Selects the delay from CS0 or address change, whichever is later, to output enable
 ;//         <o.0..3> WAITOEN: Wait output enable <0-15>
 ;//           <i> The delay is in CCLK cycles
 ;//       </h>
-EMC_STA_WOEN0_Val   EQU 0x00000003
+EMC_STA_WOEN0_Val   EQU 0x00000002
                                       
 ;//       <h> Static Memory Read Delay Register (EMCStaticWaitRd0)
 ;//         <i> Selects the delay from CS0 to a read access
 ;//         <o.0..4> WAITRD: Non-page mode read wait states or asynchronous page mode read first access wait states <1-32> <#-1>
 ;//           <i> The delay is in CCLK cycles
 ;//       </h>
-EMC_STA_WRD0_Val    EQU 0x00000005
+EMC_STA_WRD0_Val    EQU 0x0000001F
 
 ;//       <h> Static Memory Page Mode Read Delay Register (EMCStaticWaitPage0)
 ;//         <i> Selects the delay for asynchronous page mode sequential accesses for CS0
 ;//         <o.0..4> WAITPAGE: Asynchronous page mode read after the first read wait states <1-32> <#-1>
 ;//           <i> The delay is in CCLK cycles
 ;//       </h>
-EMC_STA_WPAGE0_Val  EQU 0x00000000
+EMC_STA_WPAGE0_Val  EQU 0x0000001F
 
 ;//       <h> Static Memory Write Delay Register (EMCStaticWaitWr0)
 ;//         <i> Selects the delay from CS0 to a write access
 ;//         <o.0..4> WAITWR: Write wait states <2-33> <#-2>
 ;//           <i> The delay is in CCLK cycles
 ;//       </h>
-EMC_STA_WWR0_Val    EQU 0x00000000
+EMC_STA_WWR0_Val    EQU 0x0000001F
 
 ;//       <h> Static Memory Turn Round Delay Register (EMCStaticWaitTurn0)
 ;//         <i> Selects the number of bus turnaround cycles for CS0
 ;//         <o.0..4> WAITTURN: Bus turnaround cycles <1-16> <#-1>
 ;//           <i> The delay is in CCLK cycles
 ;//       </h>
-EMC_STA_WTURN0_Val  EQU 0x00000000
+EMC_STA_WTURN0_Val  EQU 0x0000000F
 
 ;//     </e> End of Static Setup for Static CS0 Area
 
@@ -1540,7 +1540,7 @@ MEMMAP          EQU     0xE01FC040      ; Memory Mapping Control
 				
 ; clear_registers(void):
 ;  Sets r0-12 to zero, useful for debugging.
-;  This function breaks AAPCS, but is acceptable because main() never really 		
+;  This function breaks AAPCS!		
 clear_registers
 				mov r0, #0
 				mov r1, #0
