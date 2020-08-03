@@ -68,8 +68,6 @@ char get_gpio_value(int pin){
     FILE *fp = fopen(buf, "r");
     state = fgetc(fp);
     fclose(fp);
-  }else{
-    return state;
   }
   return state;
 }

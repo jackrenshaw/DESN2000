@@ -109,7 +109,6 @@ int main(){
   printf(" - Jack Renshaw\n");
   printf(" - Ayden Young\n");
   printf(" - Sashan De Silva\n");
-  sevenseg_print(45);
   int prev = 0;
   int curr = 0;
   int wheel_cycles = 0;
@@ -121,13 +120,11 @@ int main(){
   int i =0;
   float speed_vals[5] = {0,0,0,0,0};
   while(1){
-  	//printf("%d\n",i);
   	curr = get_gpio_value(WHEEL_SENSOR);
   	if((prev == '1') && (curr == '0')){
    		end_time = clock(); 
    		delay = (float)(end_time-start_time)/(float)CLOCKS_PER_SEC;
   		curr_speed = calc_speed(delay);
-      printf("%f\n", curr_speed);
       i = 4;
       while(i > 0){
         speed_vals[i] = speed_vals[(i-1)];
@@ -135,6 +132,9 @@ int main(){
       }
       speed_vals[0] = curr_speed;
       avg_speed = smooth_speed(speed_vals);
+      if(avg_speed > MAX_SPEED){
+        throttle_ground();
+      }
       printf("Average Speed %f\n",avg_speed);
   		start_time = end_time; 
   	}

@@ -6,7 +6,7 @@ void mdelay(int milli_seconds);
 int a_gt_b(float a,float b);
 float max(float a,float b);
 
-float k_model(float speed,float throttle,int brake);
+float k_model(float speed,float throttle,int brake, int prev_delay);
 void sevenseg_simulate(char bcd[8]);
 float calc_speed(long double time);
 long double calc_time(float speed);
@@ -44,7 +44,7 @@ float max(float a,float b){ // function returns the max value of two inputs
 // function needs to be called every clock cycle to be accurate
 // # defined values for kinetic coefficients are used
 // The trams speed is modelled in the following way:
-float k_model(float speed,float throttle,int brake){
+float k_model(float speed,float throttle,int brake,int prev_delay){
     float nspeed = speed/3.6; //convert to SI units
     float ke = 1/2 * TRAM_MASS * nspeed*nspeed;
     float a;
@@ -55,10 +55,11 @@ float k_model(float speed,float throttle,int brake){
 	   a = -  1*a_gt_b(nspeed,0.0)*((AERO_CONSTANT * nspeed * nspeed / 400000) + FRICTION_CONSTANT);
     }
     if(brake == 1){
-        ke = ke - BRAKE_FORCE * nspeed * 1/CYCLES_SECOND;
+        printf("Brake!\n");
+        ke = ke - (BRAKE_FORCE * nspeed * prev_delay/NANOSEC_CNST);
         speed = sqrt(2*ke/TRAM_MASS);
     }
-    nspeed = nspeed + a/CYCLES_SECOND;
+    nspeed = nspeed + (a * prev_delay/NANOSEC_CNST);
     return max((nspeed*3.6),0.0);
 }
 
@@ -94,7 +95,12 @@ float calc_speed(long double time){
 long double calc_time(float speed){
     float nspeed = speed / 3600 * 1000; // SI speed of the tram
     long double distance = WHEELD * 3.14159265 / 1000; // distance for a full wheel revolution in m
-    long double time = distance / nspeed; // number of seconds for a full wheel revolution
+    long double time;
+    if(speed > 0.01){
+        time = distance / nspeed; // number of seconds for a full wheel revolution
+    }else{
+        time = 10000.0000;
+    }
     return time;
 }
 
@@ -107,10 +113,10 @@ float smooth_speed(float speed[5]){
     int i;
     i=0;
     while(i<5){
-        avg_speed = avg_speed + speed[i];
+        avg_speed = avg_speed + (5-i)*speed[i]; // 5x0 + 4x1 + 3x2 + 2x3 + 1x4 / 15
         i++;
     }
-    avg_speed = avg_speed/5;
+    avg_speed = avg_speed/15;
     if((speed[0] > 0.0) && (speed[1] > 0.0) && (speed[2] == 0.0) && (speed[3] == 0.0)){
         avg_speed = speed[0];
         speed[1] = speed[0];
