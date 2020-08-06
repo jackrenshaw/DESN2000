@@ -114,6 +114,8 @@ int main(){
   int wheel_cycles = 0;
   clock_t start_time = clock();
   clock_t end_time;
+  printf("stopping distance 50kph: %f\n",stopping_distance(20.0,0.0));
+  printf("stopping distance with brake 50kph: %f\n",stopping_distance(20.0,1.0));
   long double delay;
   float curr_speed;
   float avg_speed;
@@ -133,7 +135,7 @@ int main(){
       speed_vals[0] = curr_speed;
       avg_speed = smooth_speed(speed_vals);
       if(avg_speed > MAX_SPEED){
-        throttle_ground();
+        ground_throttle();
       }
       printf("Average Speed %f\n",avg_speed);
   		start_time = end_time; 

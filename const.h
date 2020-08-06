@@ -3,9 +3,9 @@
 #define MAX_SPEED 50.0 // maximum speed
 #define CYCLES_SECOND 10.0 // (clock cycles per while loop)
 #define TRAM_MASS 40000 // mass of the tram in kg
-#define AERO_CONSTANT 5702.0 // (derived from a rough calculation, for kinematic modelling)
+#define AERO_CONSTANT 1.0 // (derived from a rough calculation, for kinematic modelling)
 #define FRICTION_CONSTANT 0.3 // (approximate speed invariate deceleration)
-#define BRAKE_FORCE 5000 // (approximate braking force in Newtons)
+#define BRAKE_FORCE 50000 // (approximate braking force in Newtons)
 #define LDR_CUTOFF_HIGH 800 // time (ms). Any > value will engage headlights
 #define LDR_CUTOFF_LOW 400 // time (ms). Any < time will disengate headlights
 #define PEDESTRIAN_TIME_DELAY 3000
@@ -14,7 +14,7 @@
 #define THROTTLE_ADC 1 // numer of digital outputs for the throttle
 #define RPI_GPIO_LOCATION "gpio/"
 #define SIM_GPIO_LOCATION "gpio/"
-#define NANOSEC_CNST 1000000
+#define SECOND 1000000.0
 //GPIO pin definitions
 #define LIGHT_SENSOR 26
 #define THROTTLE_0 13
