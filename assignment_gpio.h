@@ -40,26 +40,6 @@ void pin_setup(char* pin,char direction){
    fclose(fp);
 }
 
-//DEPRECATED function to set up a specific pin (on the RPi we can use a general function)
-/*
-void pin_setup_6(char direction){
-  char buf1[0x100];
-   snprintf(buf1, sizeof(buf1), "/sys/class/gpio/export");
-   FILE *fp1 = fopen(buf1, "w");
-   fputs("6",fp1);
-   fclose(fp1);
-   char buf[0x100];
-   snprintf(buf, sizeof(buf), ("/sys/class/gpio/gpio6/direction"));
-   FILE *fp = fopen(buf, "w");
-   if(direction == 'i'){
-    fputs("in",fp);       
-   }else{
-    fputs("out",fp);
-   }
-   fclose(fp);
-}
-*/
-
 char get_gpio_value(int pin){
   char state = '0';
    if(pin != -1){

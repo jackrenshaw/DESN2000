@@ -15,6 +15,7 @@
 #define RPI_GPIO_LOCATION "gpio/"
 #define SIM_GPIO_LOCATION "gpio/"
 #define SECOND 1000000.0
+#define LPC_CYCLE 987166.8
 //GPIO pin definitions
 #define LIGHT_SENSOR 26
 #define THROTTLE_0 13

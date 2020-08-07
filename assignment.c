@@ -92,6 +92,54 @@ printf("testing again");
     return 0;
 }*/
 
+int ped_detected = 0;
+float brake = 0.0;
+float speed[2] = {46.0,45.5};
+float station_distance = 10000;
+
+int get_motionsensor_val(){
+  return 0;
+}
+
+void speed_regulator(){
+  float prev2 = speed[1];
+  float prev = speed[0];
+  float curr = k_model(speed[0],0.0,brake);
+
+  float curr_acceleration = curr-prev;
+  float prev_acceleration = prev-prev2;
+
+  if(ped_detected && get_motionsensor_val()){
+    printf("Emergency Braking\n");
+    ground_throttle();
+    brake = 1.0; // emergency brake
+  }else if(prev_acceleration > 1.0 && curr_acceleration > 1.0){
+    printf("Acceleration out of bounds 2x in a row\n");
+    brake = brake+0.1;
+  }else if(station_distance < stopping_distance(curr,0.0)){
+    printf("Inadequate stopping distance, engaging brakes\n");
+    ground_throttle();
+    float brake = min_stopping_brake_force(curr,station_distance);
+  }else if(get_motionsensor_val()){
+    printf("get_motionsensor_val Detected\n");
+    ground_throttle();
+    flash_lights();
+    sound_horn();
+  }else if(curr_acceleration > 1.0){
+    printf("Acceleration out of bounds\n");
+    ground_throttle();
+  }else{
+    printf("Things are fine\n");
+    unground_throttle();
+    brake = 0.0;
+  }
+
+  ped_detected = get_motionsensor_val();
+  speed[1] = prev;
+  speed[0] = curr;
+
+}
+
 int main(){
   printf("  ____    _____   ____    _   _   ____     ___     ___     ___  \n");
   printf(" |  _ \\  | ____| / ___|  | \\ | | |___ \\   / _ \\   / _ \\   / _ \\ \n");
@@ -109,39 +157,9 @@ int main(){
   printf(" - Jack Renshaw\n");
   printf(" - Ayden Young\n");
   printf(" - Sashan De Silva\n");
-  int prev = 0;
-  int curr = 0;
-  int wheel_cycles = 0;
-  clock_t start_time = clock();
-  clock_t end_time;
-  printf("stopping distance 50kph: %f\n",stopping_distance(20.0,0.0));
-  printf("stopping distance with brake 50kph: %f\n",stopping_distance(20.0,1.0));
-  long double delay;
-  float curr_speed;
-  float avg_speed;
-  int i =0;
-  float speed_vals[5] = {0,0,0,0,0};
   while(1){
-  	curr = get_gpio_value(WHEEL_SENSOR);
-  	if((prev == '1') && (curr == '0')){
-   		end_time = clock(); 
-   		delay = (float)(end_time-start_time)/(float)CLOCKS_PER_SEC;
-  		curr_speed = calc_speed(delay);
-      i = 4;
-      while(i > 0){
-        speed_vals[i] = speed_vals[(i-1)];
-        i--;
-      }
-      speed_vals[0] = curr_speed;
-      avg_speed = smooth_speed(speed_vals);
-      if(avg_speed > MAX_SPEED){
-        ground_throttle();
-      }
-      printf("Average Speed %f\n",avg_speed);
-  		start_time = end_time; 
-  	}
-  	prev = curr;
-  	mdelay(1000);
-  	i++;
+    printf("%f\n",speed[0]);
+    speed_regulator();
+    mdelay(SECOND);
   }
 }

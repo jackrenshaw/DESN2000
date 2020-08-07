@@ -40,6 +40,24 @@ float max(float a,float b){ // function returns the max value of two inputs
     }
 }
 
+
+
+void floattodig(float number){
+  float dig_vals[16] = {0.0,0.0625,0.125,0.1875,0.250,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.875,0.9375,1.0};
+  int bin_equiv[16][4] = {{0,0,0,0},{0,0,0,1},{0,0,1,0},{0,0,1,1},{0,1,0,0},{0,1,0,1},{0,1,1,0},{0,1,1,1},{1,0,0,0},{1,0,0,1},{1,0,1,0},{1,0,1,1},{1,1,0,0},{1,1,0,1},{1,1,1,0},{1,1,1,1}};
+  float min_sep = 1.0;
+  int i,digital_equiv;
+  for(i=0;i<16;i++){
+    if(fabs(number-dig_vals[i]) < min_sep){
+      digital_equiv = i;
+      min_sep = fabs(number-dig_vals[i]);
+    }
+  }
+  for(i=0;i<4;i++){
+    printf("%d ",bin_equiv[digital_equiv][i]);
+  }
+}
+
 // models the speed of the tram based on current speed, throttle power and brake (boolean)
 // function needs to be called every clock cycle to be accurate
 // # defined values for kinetic coefficients are used
@@ -64,10 +82,8 @@ float k_model(float speed,float throttle,float brake){
 float stopping_distance(float speed,float brake){
     float distance = 0.0;
     float curr_speed = speed;
-    printf("%f",curr_speed);
     while(curr_speed > 1.0){
         curr_speed = k_model(curr_speed,0.0,brake);
-        printf("%f\n",curr_speed);
         distance = distance + curr_speed;
     }
     return distance;
@@ -77,9 +93,10 @@ float min_stopping_brake_force(float speed, float station_distance){
     float i=0.1;
     float st_d = stopping_distance(speed,0.0);
     while((i<1.1) && (st_d>station_distance)){
-        float st_d = stopping_distance(speed,0.0);
+        st_d = stopping_distance(speed,i);
         i = i+0.1;
     }
+    printf("Min braking force is %f\n",i);
     return i;
 }
 
